@@ -1,0 +1,13 @@
+POST http://localhost:3003/api/kysymykset 
+Content-Type: application/json
+
+{
+  "kysymys": "jotain",
+  "selitys": "jotain",
+  "url": "jotain",
+  "puolueet": [
+      {"nimi": "Perussuomalaisten eduskuntaryhmä", "jaa": 23, "ei": 0, "tyhjia": 0, "poissa": 13},
+      {"nimi": "Toinen eduskuntaryhmä", "jaa": 23, "ei": 0, "tyhjia": 0, "poissa": 13}
+    ],
+  "edustajat": []
+}

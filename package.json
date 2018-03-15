@@ -1,0 +1,23 @@
+{
+  "name": "vaalikoneback",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ode index.js",
+    "watch": "nodemon index.js",
+    "lint": "eslint ."
+  },
+  "author": "Petteri Pääkkönen",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.4",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.3",
+    "mongoose": "^5.0.10"
+  },
+  "devDependencies": {
+    "eslint": "^4.18.2",
+    "nodemon": "^1.17.2"
+  }
+}
