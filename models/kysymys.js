@@ -5,7 +5,8 @@ const kysymysSchema = new mongoose.Schema({
   selitys: String,
   url: String,
   puolueet: Array,
-  edustajat: Array
+  edustajat: Array,
+  vuosi: String
 })
 
 kysymysSchema.statics.format = (kysymys) => {
@@ -16,6 +17,7 @@ kysymysSchema.statics.format = (kysymys) => {
     url: kysymys.url,
     puolueet: kysymys.puolueet,
     edustajat: kysymys.edustajat,
+    vuosi: kysymys.vuosi
   }
 }
 
