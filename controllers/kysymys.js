@@ -56,6 +56,7 @@ kysymysRouter.get('/:id', async (request, response) => {
 
 kysymysRouter.delete('/:id', async (request, response) => {
   try{
+    console.log('request', request.params)
     const token = getTokenFrom(request)
     const decodedToken = jwt.verify(token, process.env.SECRET)
     if (!decodedToken.id || !token) {
