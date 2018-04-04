@@ -1,5 +1,6 @@
 const kysymysRouter = require('express').Router()
 const Kysymys = require('../models/kysymys')
+const Kategoria = require('../models/kategoria')
 const jwt = require('jsonwebtoken')
 
 const getTokenFrom = (request) => {
@@ -25,7 +26,17 @@ kysymysRouter.post('/', async (request, response) => {
       return response.status(401).json({ error: 'token missing or invalid' })
     }
     const kysymys = new Kysymys(body)
-    await kysymys.save()
+    const savedKysymys = await kysymys.save()
+
+    if(body.kategoriat){
+      for (let i = 0; i < body.kategoriat.length; i += 1) {
+        const kategoria = await Kategoria.findById(body.kategoriat[i])
+        const id = savedKysymys._id
+        kategoria.kysymykset = kategoria.kysymykset.concat(id)
+        await kategoria.save()
+      }
+    }
+
     response.json(Kysymys.format(kysymys))
   } catch (exception) {
     if (exception.name === 'JsonWebTokenError' ) {

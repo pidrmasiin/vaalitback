@@ -1,14 +1,15 @@
 POST http://localhost:3003/api/kysymykset 
 Content-Type: application/json
-Authorization: bearer 
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBlZHJvIiwiaWQiOiI1YWIzOTE1MTQ5OTM1ZTM4ZWUwNWI5MmEiLCJpYXQiOjE1MjI4NDAzODJ9.FaGk7gcYPAHkpwrXinMw0GBLONuq5obfcC3Edk_NwM4
 
 {
-  "kysymys": "jotain",
-  "selitys": "jotain",
-  "url": "jotain",
+  "kysymys": "Testi kysymys",
+  "selitys": "Miten menee?",
+  "url": "kotisivut",
   "puolueet": [
       {"nimi": "Perussuomalaisten eduskuntaryhmä", "jaa": 23, "ei": 0, "tyhjia": 0, "poissa": 13},
       {"nimi": "Toinen eduskuntaryhmä", "jaa": 23, "ei": 0, "tyhjia": 0, "poissa": 13}
     ],
-  "edustajat": []
+  "edustajat": [],
+  "kategoriat": ["5ac4d549fd02672e1cdfeb6e"]
 }

@@ -9,6 +9,7 @@ const middleware = require('./utils/middleware')
 const kysymyksetRouter = require('./controllers/kysymys')
 const loginRouter = require('./controllers/login')
 const userRouter = require('./controllers/user')
+const kategoriatRouter = require('./controllers/kategoria')
 
 mongoose.connect(config.mongoUrl)
 mongoose.Promise = global.Promise
@@ -21,6 +22,7 @@ app.use(middleware.logger)
 app.use('/api/users', userRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/kysymykset', kysymyksetRouter)
+app.use('/api/kategoriat', kategoriatRouter)
 
 app.use(middleware.error)
 
