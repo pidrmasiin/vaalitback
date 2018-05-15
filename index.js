@@ -1,4 +1,5 @@
 const http = require('http')
+const path = require('path')
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
@@ -24,8 +25,16 @@ app.use('/api/login', loginRouter)
 app.use('/api/kysymykset', kysymyksetRouter)
 app.use('/api/kategoriat', kategoriatRouter)
 
-app.use(middleware.error)
 
+
+app.get('/*', function(req, res) {
+  res.sendFile(path.join(__dirname, 'build/index.html'), function(err) {
+    if (err) {
+      res.status(500).send(err)
+    }
+  })
+})
+app.use(middleware.error)
 const server = http.createServer(app)
 
 server.listen(config.port, () => {

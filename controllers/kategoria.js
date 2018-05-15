@@ -24,9 +24,9 @@ kategoriaRouter.post('/', async (request, response) => {
     if (!token || !decodedToken.id) {
       return response.status(401).json({ error: 'token missing or invalid' })
     }
-    const kateogoria = new Kategoria(body)
-    await kateogoria.save()
-    response.json(Kategoria.format(kateogoria))
+    const kategoria = new Kategoria(body)
+    await kategoria.save()
+    response.json(Kategoria.format(kategoria))
   } catch (exception) {
     if (exception.name === 'JsonWebTokenError' ) {
       response.status(401).json({ error: exception.message })
@@ -51,6 +51,25 @@ kategoriaRouter.get('/:id', async (request, response) => {
     response.status(400).send({ error: 'malformatted id' })
   }
 
+})
+
+kategoriaRouter.delete('/:id', async (request, response) => {
+  try{
+    const token = getTokenFrom(request)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!decodedToken.id || !token) {
+      return response.status(401).json({ error: 'token missing or invalid' })
+    }
+    await Kategoria.findByIdAndRemove(request.params.id)
+    response.status(204).end()
+  }catch (exception) {
+    if (exception.name === 'JsonWebTokenError' ) {
+      response.status(401).json({ error: exception.message })
+    }else {
+      console.log(exception)
+      response.status(400).json({ error: 'already deleted?' })
+    }
+  }
 })
 
 
