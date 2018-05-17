@@ -12,13 +12,17 @@ const getTokenFrom = (request) => {
 }
 
 kysymysRouter.get('/', async (request, response) => {
-  const kysymykset = await Kysymys.find({})
+  const kysymykset = await Kysymys
+    .find({})
+    .populate('kategoriat', { nimi: 1 } )
   response.json(kysymykset.map(Kysymys.format))
 })
 
 kysymysRouter.get('/:id', async (request, response) => {
   try{
-    const kysymys = await Kysymys.findById(request.params.id)
+    const kysymys = await Kysymys
+      .findById(request.params.id)
+      .populate('kategoriat', { nimi: 1 } )
     response.json(Kysymys.format(kysymys))
   }catch (exception) {
     console.log(exception)
@@ -36,17 +40,16 @@ kysymysRouter.post('/', async (request, response) => {
       return response.status(401).json({ error: 'token missing or invalid' })
     }
     const kysymys = new Kysymys(body)
-    const savedKysymys = await kysymys.save()
 
     if(body.kategoriat){
       for (let i = 0; i < body.kategoriat.length; i += 1) {
         const kategoria = await Kategoria.findById(body.kategoriat[i])
-        const id = savedKysymys._id
+        const id = kysymys._id
         kategoria.kysymykset = kategoria.kysymykset.concat(id)
         await kategoria.save()
       }
     }
-
+    await kysymys.save()
     response.json(Kysymys.format(kysymys))
   } catch (exception) {
     if (exception.name === 'JsonWebTokenError' ) {
@@ -66,19 +69,19 @@ kysymysRouter.put('/:id', async (request, response) => {
     if (!token || !decodedToken.id) {
       return response.status(401).json({ error: 'token missing or invalid' })
     }
-
     const kysymys = request.body
-    const edited = await Kysymys.findByIdAndUpdate(request.params.id, kysymys, { new: true })
-
     if(kysymys.kategoriat){
       for (let i = 0; i < kysymys.kategoriat.length; i += 1) {
         const kategoria = await Kategoria.findById(kysymys.kategoriat[i])
-        const id = edited._id
-        kategoria.kysymykset = kategoria.kysymykset.concat(id)
-        await kategoria.save()
+        const id = request.params.id
+        const exist = kategoria.kysymykset.find(x => x == kysymys.id)
+        if(!exist){
+          kategoria.kysymykset = kategoria.kysymykset.concat(id)
+          await kategoria.save()
+        }
       }
     }
-
+    const edited = await Kysymys.findByIdAndUpdate(request.params.id, kysymys, { new: true })
     response.json(edited).end()
 
   } catch (exception) {

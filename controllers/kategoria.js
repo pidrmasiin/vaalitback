@@ -1,5 +1,6 @@
 const kategoriaRouter = require('express').Router()
 const Kategoria = require('../models/kategoria')
+const Kysymys = require('../models/kysymys')
 const jwt = require('jsonwebtoken')
 
 const getTokenFrom = (request) => {
@@ -59,6 +60,15 @@ kategoriaRouter.delete('/:id', async (request, response) => {
     const decodedToken = jwt.verify(token, process.env.SECRET)
     if (!decodedToken.id || !token) {
       return response.status(401).json({ error: 'token missing or invalid' })
+    }
+    const kategoria = await Kategoria.findById(request.params.id)
+    if(kategoria.kysymykset){
+      for (let i = 0; i < kategoria.kysymykset.length; i += 1) {
+        const kysymys = await Kysymys.findById(kategoria.kysymykset[i])
+        const id = request.params.id
+        kysymys.kategoriat = kysymys.kategoriat.filter(x => x.toString() !== id.toString())
+        await Kysymys.findByIdAndUpdate(kysymys.id, kysymys, { new: true })
+      }
     }
     await Kategoria.findByIdAndRemove(request.params.id)
     response.status(204).end()
