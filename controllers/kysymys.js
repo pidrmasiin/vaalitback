@@ -70,20 +70,60 @@ kysymysRouter.put('/:id', async (request, response) => {
       return response.status(401).json({ error: 'token missing or invalid' })
     }
     const kysymys = request.body
-    if(kysymys.kategoriat){
+    const old = await Kysymys.findById(kysymys.id)
+    var oldcat = old.kategoriat
+    // console.log('oldcat', oldcat)
+    // console.log('kysymys', kysymys.kategoriat)
+    if (kysymys.kategoriat && kysymys.kategoriat.length === 0){
+      for (let i = 0; i < oldcat.length; i += 1) {
+        // console.log('nolla')
+        const kategoria = await Kategoria.findById(oldcat[i])
+        if(kategoria.kysymykset.length > 0){
+          var ind = kategoria.kysymykset.indexOf(kysymys.id)
+          if (ind !== -1) kategoria.kysymykset.splice(ind, 1)
+        }
+        await kategoria.save()
+      }
+    } else if(kysymys.kategoriat){
+      // console.log('lisäys')
       for (let i = 0; i < kysymys.kategoriat.length; i += 1) {
         const kategoria = await Kategoria.findById(kysymys.kategoriat[i])
         const id = request.params.id
         const exist = kategoria.kysymykset.find(x => x == kysymys.id)
         if(!exist){
+          // console.log('kategorioiden lisäys')
           kategoria.kysymykset = kategoria.kysymykset.concat(id)
           await kategoria.save()
         }
+        // console.log('oldcat ennen poistoa', oldcat)
+        if(oldcat){
+          // console.log('vanhan arrayn muokkaus')
+          for (let s = 0; s < oldcat.length; s += 1) {
+            const find = oldcat.find(x => x == kysymys.kategoriat[i])
+            if(find){
+              // console.log('poisto arraysta')
+              var index = oldcat.indexOf(find)
+              if (index !== -1) oldcat.splice(index, 1)
+            }
+          }
+        }
+      }
+      if(oldcat){
+        // console.log('tietokannasta poisto')
+        for (let i = 0; i < oldcat.length; i += 1) {
+          const kategoria = await Kategoria.findById(oldcat[i])
+          // console.log('kategoria', kategoria)
+          if (kategoria) {
+            var inx = kategoria.kysymykset.indexOf(kysymys.id)
+            if (inx !== -1) kategoria.kysymykset.splice(inx, 1)
+            await kategoria.save()
+          }
+        }
       }
     }
-    const edited = await Kysymys.findByIdAndUpdate(request.params.id, kysymys, { new: true })
-    response.json(edited).end()
-
+    // console.log('oldcat', oldcat)
+    const edite = await Kysymys.findByIdAndUpdate(request.params.id, kysymys, { new: true })
+    response.json(edite).end()
   } catch (exception) {
     if (exception.name === 'JsonWebTokenError' ) {
       response.status(401).json({ error: exception.message })
@@ -93,8 +133,6 @@ kysymysRouter.put('/:id', async (request, response) => {
     }
   }
 })
-
-
 
 kysymysRouter.get('/:id', async (request, response) => {
 
@@ -114,7 +152,6 @@ kysymysRouter.get('/:id', async (request, response) => {
 
 kysymysRouter.delete('/:id', async (request, response) => {
   try{
-    console.log('request', request.params)
     const token = getTokenFrom(request)
     const decodedToken = jwt.verify(token, process.env.SECRET)
     if (!decodedToken.id || !token) {
