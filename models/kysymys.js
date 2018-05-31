@@ -7,6 +7,7 @@ const kysymysSchema = new mongoose.Schema({
   puolueet: Array,
   edustajat: Array,
   vuosi: String,
+  vastaus: String,
   kategoriat: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Kategoria' }]
 })
 
@@ -19,6 +20,7 @@ kysymysSchema.statics.format = (kysymys) => {
     puolueet: kysymys.puolueet,
     edustajat: kysymys.edustajat,
     vuosi: kysymys.vuosi,
+    vastaus: kysymys.vastaus,
     kategoriat: kysymys.kategoriat
   }
 }
