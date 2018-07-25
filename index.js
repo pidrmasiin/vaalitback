@@ -11,6 +11,7 @@ const kysymyksetRouter = require('./controllers/kysymys')
 const loginRouter = require('./controllers/login')
 const userRouter = require('./controllers/user')
 const kategoriatRouter = require('./controllers/kategoria')
+const yleRouter = require('./controllers/yle')
 
 mongoose.connect(config.mongoUrl)
 mongoose.Promise = global.Promise
@@ -24,6 +25,7 @@ app.use('/api/users', userRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/kysymykset', kysymyksetRouter)
 app.use('/api/kategoriat', kategoriatRouter)
+app.use('/api/yle', yleRouter)
 
 
 
