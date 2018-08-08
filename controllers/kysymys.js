@@ -32,7 +32,7 @@ kysymysRouter.get('/:id', async (request, response) => {
 
 kysymysRouter.post('/', async (request, response) => {
   const body = request.body
-
+  console.log('body')
   try{
     const token = getTokenFrom(request)
     const decodedToken = jwt.verify(token, process.env.SECRET)

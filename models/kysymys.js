@@ -9,6 +9,7 @@ const kysymysSchema = new mongoose.Schema({
   vuosi: String,
   vastaus: String,
   kysymyksenAsettelu: Boolean,
+  hot: Boolean,
   kategoriat: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Kategoria' }]
 })
 
@@ -23,6 +24,7 @@ kysymysSchema.statics.format = (kysymys) => {
     vuosi: kysymys.vuosi,
     vastaus: kysymys.vastaus,
     kategoriat: kysymys.kategoriat,
+    hot: kysymys.hot,
     kysymyksenAsettelu: kysymys.kysymyksenAsettelu
   }
 }
