@@ -4,14 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ode index.js",
+    "start": "node index.js",
     "watch": "nodemon index.js",
     "lint": "eslint ."
   },
   "author": "Petteri Pääkkönen",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^1.0.3",
+    "bcrypt": "^3.0.3",
     "cors": "^2.8.4",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
@@ -20,6 +20,6 @@
   },
   "devDependencies": {
     "eslint": "^4.18.2",
-    "nodemon": "^1.17.2"
+    "nodemon": "^1.18.9"
   }
 }
