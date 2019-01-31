@@ -12,7 +12,8 @@ const kysymysSchema = new mongoose.Schema({
   hot: Boolean,
   kategoriat: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Kategoria' }],
   jaaLiberal: Boolean,
-  jaaLeftist: Boolean
+  jaaLeftist: Boolean,
+  green: Boolean
 })
 
 kysymysSchema.statics.format = (kysymys) => {
@@ -29,7 +30,8 @@ kysymysSchema.statics.format = (kysymys) => {
     hot: kysymys.hot,
     kysymyksenAsettelu: kysymys.kysymyksenAsettelu,
     jaaLiberal: kysymys.jaaLiberal,
-    jaaLeftist: kysymys.jaaLeftist
+    jaaLeftist: kysymys.jaaLeftist,
+    green: kysymys.green
   }
 }
 
