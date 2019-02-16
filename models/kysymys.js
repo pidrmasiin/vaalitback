@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const kysymysSchema = new mongoose.Schema({
+  tunniste: String,
   kysymys: String,
   selitys: String,
   url: String,
@@ -19,6 +20,7 @@ const kysymysSchema = new mongoose.Schema({
 kysymysSchema.statics.format = (kysymys) => {
   return{
     id: kysymys._id,
+    tunniste: kysymys.tunniste,
     kysymys: kysymys.kysymys,
     selitys: kysymys.selitys,
     url: kysymys.url,
