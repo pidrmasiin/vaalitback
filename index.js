@@ -12,12 +12,13 @@ const loginRouter = require('./controllers/login')
 const userRouter = require('./controllers/user')
 const kategoriatRouter = require('./controllers/kategoria')
 const yleRouter = require('./controllers/yle')
+const yle2019Router = require('./controllers/yle2019')
 
 mongoose.connect(config.mongoUrl)
 mongoose.Promise = global.Promise
 
 app.use(cors())
-app.use(bodyParser.json())
+app.use(bodyParser.json({limit: '200mb', extended: true}))
 app.use(express.static('build'))
 app.use(middleware.logger)
 
@@ -26,6 +27,8 @@ app.use('/api/login', loginRouter)
 app.use('/api/kysymykset', kysymyksetRouter)
 app.use('/api/kategoriat', kategoriatRouter)
 app.use('/api/yle', yleRouter)
+app.use('/api/yle2019', yle2019Router)
+
 
 
 

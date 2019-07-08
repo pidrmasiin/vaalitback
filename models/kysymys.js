@@ -14,7 +14,9 @@ const kysymysSchema = new mongoose.Schema({
   kategoriat: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Kategoria' }],
   jaaLiberal: Boolean,
   jaaLeftist: Boolean,
-  green: Boolean
+  green: Boolean,
+  createdAt: Date,
+  yle2019: String
 })
 
 kysymysSchema.statics.format = (kysymys) => {
@@ -33,7 +35,9 @@ kysymysSchema.statics.format = (kysymys) => {
     kysymyksenAsettelu: kysymys.kysymyksenAsettelu,
     jaaLiberal: kysymys.jaaLiberal,
     jaaLeftist: kysymys.jaaLeftist,
-    green: kysymys.green
+    green: kysymys.green,
+    createdAt: kysymys.createdAt,
+    yle2019: kysymys.yle2019
   }
 }
 

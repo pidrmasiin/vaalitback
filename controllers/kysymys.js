@@ -32,15 +32,16 @@ kysymysRouter.get('/:id', async (request, response) => {
 
 kysymysRouter.post('/', async (request, response) => {
   const body = request.body
-  console.log('body')
   try{
     const token = getTokenFrom(request)
     const decodedToken = jwt.verify(token, process.env.SECRET)
     if (!token || !decodedToken.id) {
       return response.status(401).json({ error: 'token missing or invalid' })
     }
-    const kysymys = new Kysymys(body)
+    body.createdAt = Date.now()
 
+    const kysymys = new Kysymys(body)
+    
     if(body.kategoriat){
       for (let i = 0; i < body.kategoriat.length; i += 1) {
         const kategoria = await Kategoria.findById(body.kategoriat[i])
