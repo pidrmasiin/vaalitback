@@ -13,6 +13,7 @@ const userRouter = require('./controllers/user')
 const kategoriatRouter = require('./controllers/kategoria')
 const yleRouter = require('./controllers/yle')
 const yle2019Router = require('./controllers/yle2019')
+const speakRouter = require('./controllers/speak')
 
 mongoose.connect(config.mongoUrl)
 mongoose.Promise = global.Promise
@@ -28,9 +29,7 @@ app.use('/api/kysymykset', kysymyksetRouter)
 app.use('/api/kategoriat', kategoriatRouter)
 app.use('/api/yle', yleRouter)
 app.use('/api/yle2019', yle2019Router)
-
-
-
+app.use('/api/speaks', speakRouter)
 
 app.get('/*', function(req, res) {
   res.sendFile(path.join(__dirname, 'build/index.html'), function(err) {

@@ -4,6 +4,7 @@ const kysymysSchema = new mongoose.Schema({
   tunniste: String,
   kysymys: String,
   selitys: String,
+  explain: String,
   url: String,
   puolueet: Array,
   edustajat: Array,
@@ -37,7 +38,8 @@ kysymysSchema.statics.format = (kysymys) => {
     jaaLeftist: kysymys.jaaLeftist,
     green: kysymys.green,
     createdAt: kysymys.createdAt,
-    yle2019: kysymys.yle2019
+    yle2019: kysymys.yle2019,
+    explain: kysymys.explain
   }
 }
 
