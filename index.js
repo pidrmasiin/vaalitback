@@ -15,7 +15,7 @@ const yleRouter = require('./controllers/yle')
 const yle2019Router = require('./controllers/yle2019')
 const speakRouter = require('./controllers/speak')
 
-mongoose.connect(config.mongoUrl)
+mongoose.connect(config.mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true } )
 mongoose.Promise = global.Promise
 
 app.use(cors())
@@ -39,6 +39,10 @@ app.get('/*', function(req, res) {
   })
 })
 app.use(middleware.error)
+
+
+
+
 const server = http.createServer(app)
 
 server.listen(config.port, () => {

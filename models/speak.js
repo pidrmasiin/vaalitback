@@ -1,23 +1,25 @@
 const mongoose = require('mongoose')
 
 const speakSchema = new mongoose.Schema({
-  speak: String,
-  party: String,
-  shout: Boolean,
-  speaker: String,
-  time: String,
-  question: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Kysymys' }]
+  data: Array,
+  question: { type: mongoose.Schema.Types.ObjectId, ref: 'Kysymys' },
+  explainQuestion: String,
+  details: String,
+  url: String,
+  html: String,
+  createdAt: Date,
 }, { timestamps: true })
 
 speakSchema.statics.format = (speak) => {
   return{
     id: speak._id,
-    party: speak.party,
-    shout: speak.shout,
     question: speak.question,
-    time: speak.time,
-    speaker: speak.speaker,
-    speak: speak.speak
+    explainQuestion: speak.explainQuestion,
+    details: speak.details,
+    data: speak.data,
+    url: speak.url,
+    html: speak.html,
+    createdAt: speak.createdAt
   }
 }
 

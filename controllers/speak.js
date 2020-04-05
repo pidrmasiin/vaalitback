@@ -36,8 +36,30 @@ speakRouter.post('/', async (request, response) => {
         return response.status(401).json({ error: 'token missing or invalid' })
       }
       const speak = new Speak(body)
+      speak.createdAt = Date.now()
       await speak.save()
       response.json(Speak.format(speak))
+    } catch (exception) {
+      if (exception.name === 'JsonWebTokenError' ) {
+        response.status(401).json({ error: exception.message })
+      } else {
+        console.log(exception)
+        response.status(500).json({ error: 'something went wrong...' })
+      }
+    }
+  })
+
+  speakRouter.put('/:id', async (request, response) => {
+    try{
+      const token = getTokenFrom(request)
+      const decodedToken = jwt.verify(token, process.env.SECRET)
+      if (!token || !decodedToken.id) {
+        return response.status(401).json({ error: 'token missing or invalid' })
+      }
+      const speak = request.body
+      speak.createdAt = Date.now()
+      const edite = await Speak.findByIdAndUpdate(request.params.id, speak, { new: true })
+      response.json(edite).end()
     } catch (exception) {
       if (exception.name === 'JsonWebTokenError' ) {
         response.status(401).json({ error: exception.message })
