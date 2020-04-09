@@ -7,6 +7,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const config = require('./utils/config')
 const middleware = require('./utils/middleware')
+const schedule = require('./utils/scheduled')
 const kysymyksetRouter = require('./controllers/kysymys')
 const loginRouter = require('./controllers/login')
 const userRouter = require('./controllers/user')
@@ -22,6 +23,16 @@ app.use(cors())
 app.use(bodyParser.json({limit: '200mb', extended: true}))
 app.use(express.static('build'))
 app.use(middleware.logger)
+function requestLogger(httpModule){
+  var original = httpModule.request
+  httpModule.request = function(options, callback){
+    console.log(options.href||options.proto+"://"+options.host+options.path, options.method, options.headers)
+    return original(options, callback)
+  }
+}
+
+requestLogger(require('http'))
+requestLogger(require('https'))
 
 app.use('/api/users', userRouter)
 app.use('/api/login', loginRouter)
@@ -41,7 +52,7 @@ app.get('/*', function(req, res) {
 app.use(middleware.error)
 
 
-
+// schedule.twitterBot
 
 const server = http.createServer(app)
 
