@@ -2,7 +2,7 @@ var schedule = require('node-schedule');
 const Twit = require('twit');
 const vaskiData = require('./vaskiData')
  
-var twitterBot = schedule.scheduleJob('10 5,13,17 * * *', function(){
+var twitterBot = schedule.scheduleJob('10 4,12,16 * * *', function(){
     console.log(',', new Date());
     
         const twitSecrets = {
