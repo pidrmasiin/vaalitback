@@ -6,10 +6,10 @@ const util = require('util')
 
 const getSpeaks = async function () {
     try {
-    let startValue = 143631
+    let startValue = 143931
     let vaski = await axios.get(`https://avoindata.eduskunta.fi/api/v1/tables/VaskiData/batch?pkStartValue=${startValue}&pkName=Id`)
     
-        //  console.log(util.inspect(data, {showHidden: false, depth: null}))
+        //  console.log(util.inspect(vaski, {showHidden: false, depth: null}))
 
     let i = vaski.data.rowCount
     while (i > 99) {
@@ -39,18 +39,14 @@ const getSpeaks = async function () {
 
     const aihe = data["ns11:Siirto"]['SiirtoAsiakirja']['RakenneAsiakirja']["ptk:PoytakirjaAsiakohta"]["vsk:Asiakohta"]['vsk:KohtaNimeke']['met1:NimekeTeksti']
     let random = puheenvuorot[Math.floor(Math.random() * puheenvuorot.length)];
-
-    if (!random) {
-        random = puheenvuorot[Math.floor(Math.random() * puheenvuorot.length)];
+    let puheenosat = random['vsk:PuheenvuoroOsa']['vsk:KohtaSisalto']["sis:KappaleKooste"]
+    let randomInt =  Math.floor(Math.random() * puheenosat.length)
+    let puhe = puheenosat[randomInt]
+    
+    if (!puhe) {
+        randomInt =  Math.floor(Math.random() * puheenosat.length)
+        puhe = puheenosat[randomInt]
     }
-
-    let puhe = random['vsk:PuheenvuoroOsa']['vsk:KohtaSisalto']["sis:KappaleKooste"][Math.floor(Math.random() * puheenvuorot.length)]
-    
-    if(!puhe) {
-        puhe = random['vsk:PuheenvuoroOsa']['vsk:KohtaSisalto']["sis:KappaleKooste"][Math.floor(Math.random() * puheenvuorot.length)]
-    }
-    
-    
     const puhuja = Object.values(random["met:Toimija"]["org:Henkilo"]).join(' ')
 
     const speak = {
@@ -59,7 +55,7 @@ const getSpeaks = async function () {
         puhuja: puhuja
     }
 
-    console.log('speak', speak);
+    console.log('spea', speak);
     return speak
   } catch(exception){
     console.log('VaskiData ' + exception.message);

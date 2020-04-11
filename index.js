@@ -8,6 +8,7 @@ const mongoose = require('mongoose')
 const config = require('./utils/config')
 const middleware = require('./utils/middleware')
 const schedule = require('./utils/scheduled')
+const vaskiData = require('./utils/vaskiData')
 const kysymyksetRouter = require('./controllers/kysymys')
 const loginRouter = require('./controllers/login')
 const userRouter = require('./controllers/user')
@@ -50,7 +51,6 @@ app.get('/*', function(req, res) {
   })
 })
 app.use(middleware.error)
-
 
 // schedule.twitterBot
 
