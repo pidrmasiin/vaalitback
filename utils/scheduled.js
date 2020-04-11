@@ -43,11 +43,11 @@ var twitterBot = schedule.scheduleJob('10 4,12,16 * * *', function(){
             
             let tweetCount = restTweets.length
             let index = 0
-            tweetRes = await T.post('statuses/update', { status: tweet.slice(0, 260) + ' 1/' + tweetCount + 1 })
+            tweetRes = await T.post('statuses/update', { status: tweet.slice(0, 260) + ' 1/' + (tweetCount + 1) })
             while (index < tweetCount) {
                 index++;
                 tweetRes = await T.post('statuses/update', { 
-                    status: `${restTweets[index - 1]} ${index + 1}/${tweetCount} @${tweetRes.data.user.screen_name}`,
+                    status: `${restTweets[index - 1]} ${index + 1}/${tweetCount + 1} @${tweetRes.data.user.screen_name}`,
                     in_reply_to_status_id: tweetRes.data.id_str.toString()
                 })
             }
