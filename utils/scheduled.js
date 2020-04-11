@@ -31,6 +31,9 @@ var twitterBot = schedule.scheduleJob('10 4,12,16 * * *', function(){
     async function sendTweet(){
         const speak = await vaskiData.getSpeaks()
         const tweet = speak.puhe
+        if (tweet.length < 10) {
+            return;
+        }
         let tweetRes;
         if(tweet.length < 281) {
             tweetRes = await T.post('statuses/update', { status: tweet.slice(0, 280) })
@@ -40,7 +43,7 @@ var twitterBot = schedule.scheduleJob('10 4,12,16 * * *', function(){
             
             let tweetCount = restTweets.length
             let index = 0
-            tweetRes = await T.post('statuses/update', { status: tweet.slice(0, 260) + ' 1/' + tweetCount })
+            tweetRes = await T.post('statuses/update', { status: tweet.slice(0, 260) + ' 1/' + tweetCount + 1 })
             while (index < tweetCount) {
                 index++;
                 tweetRes = await T.post('statuses/update', { 

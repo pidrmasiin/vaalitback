@@ -39,14 +39,23 @@ const getSpeaks = async function () {
 
     const aihe = data["ns11:Siirto"]['SiirtoAsiakirja']['RakenneAsiakirja']["ptk:PoytakirjaAsiakohta"]["vsk:Asiakohta"]['vsk:KohtaNimeke']['met1:NimekeTeksti']
     let random = puheenvuorot[Math.floor(Math.random() * puheenvuorot.length)];
-    let puheenosat = random['vsk:PuheenvuoroOsa']['vsk:KohtaSisalto']["sis:KappaleKooste"]
-    let randomInt =  Math.floor(Math.random() * puheenosat.length)
-    let puhe = puheenosat[randomInt]
+
     
-    if (!puhe) {
-        randomInt =  Math.floor(Math.random() * puheenosat.length)
+    let puheenosat = random['vsk:PuheenvuoroOsa']['vsk:KohtaSisalto']["sis:KappaleKooste"]
+    let puhe = 'VIRHE'
+    
+    if(typeof puheenosat == 'string') {
+        puhe = puheenosat
+    } else if(Array.isArray(puheenosat)) {
+        let randomInt =  Math.floor(Math.random() * puheenosat.length)
         puhe = puheenosat[randomInt]
+        if (!puhe || puhe.length < 10) {
+            randomInt =  Math.floor(Math.random() * puheenosat.length)
+            puhe = puheenosat[randomInt]
+        }
     }
+
+    
     const puhuja = Object.values(random["met:Toimija"]["org:Henkilo"]).join(' ')
 
     const speak = {

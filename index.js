@@ -53,6 +53,7 @@ app.get('/*', function(req, res) {
 app.use(middleware.error)
 
 // schedule.twitterBot
+vaskiData.getSpeaks()
 
 const server = http.createServer(app)
 
