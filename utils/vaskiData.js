@@ -21,10 +21,16 @@ const getSpeaks = async function () {
     let rowId = vaski.data.rowData.length
     let puheenvuorot;
     let data;
+    let aihe;
+    let random;
+    let puheenosat;
     while (rowId > 0) {
         data = parser.parse(vaski.data.rowData[rowId - 1][1]);
         try {
             puheenvuorot = data["ns11:Siirto"]['SiirtoAsiakirja']['RakenneAsiakirja']["ptk:PoytakirjaAsiakohta"]["vsk:Asiakohta"]["vsk:KeskusteluToimenpide"]["vsk:PuheenvuoroToimenpide"]
+            aihe = data["ns11:Siirto"]['SiirtoAsiakirja']['RakenneAsiakirja']["ptk:PoytakirjaAsiakohta"]["vsk:Asiakohta"]['vsk:KohtaNimeke']['met1:NimekeTeksti']
+            random = puheenvuorot[Math.floor(Math.random() * puheenvuorot.length)];
+            puheenosat = random['vsk:PuheenvuoroOsa']['vsk:KohtaSisalto']["sis:KappaleKooste"]
             break;
         } catch {
         }
@@ -36,12 +42,6 @@ const getSpeaks = async function () {
         }
     }
 
-
-    const aihe = data["ns11:Siirto"]['SiirtoAsiakirja']['RakenneAsiakirja']["ptk:PoytakirjaAsiakohta"]["vsk:Asiakohta"]['vsk:KohtaNimeke']['met1:NimekeTeksti']
-    let random = puheenvuorot[Math.floor(Math.random() * puheenvuorot.length)];
-
-    
-    let puheenosat = random['vsk:PuheenvuoroOsa']['vsk:KohtaSisalto']["sis:KappaleKooste"]
     let puhe = 'VIRHE'
     
     if(typeof puheenosat == 'string') {
