@@ -19,16 +19,19 @@ const getNewVoting = async function () {
     // console.log(vaski)
 
     let voteType;
-
+    let language;
+      
     let vaskiVoteId = startValue
-    while (voteType != 'hyväksyminen/hylkääminen') {
+    
+    while (voteType != 'hyväksyminen/hylkääminen' && language != '1') {
       const newVaski = await axios.get(`https://avoindata.eduskunta.fi/api/v1/tables/SaliDBAanestys/rows?perPage=10&page=0&columnName=AanestysId&columnValue=${vaskiVoteId + 1}`)
-      console.log(newVaski.data.rowData);
+      console.log(newVaski);
       
       if (newVaski.data.rowData.length) {
         vaski = newVaski
         vaskiVoteId = parseInt(vaskiVoteId) + 1
         voteType = vaski.data.rowData[0][12].split(" ").join("").toLowerCase()
+        language = vaski.data.rowData[0][1]
       } else {
         break;
       }
@@ -49,7 +52,11 @@ const getNewVoting = async function () {
     const votes = await getVotes(vaskiVoteId)
     
     const partyVotes = await getPartiesVotes(vaskiVoteId)
-
+    
+    if (partyVotes.length == 0){
+      return
+    }
+    
 
     const kysymys_model = {
       tunniste: tunniste,

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+var uniqueValidator = require('mongoose-unique-validator');
 
 const memberSchema = new mongoose.Schema({
     vaskiPersonId: {
@@ -9,6 +10,8 @@ const memberSchema = new mongoose.Schema({
     lastName: String,
     party: String
 }, { timestamps: true })
+
+memberSchema.plugin(uniqueValidator);
 
 memberSchema.statics.format = (member) => {
   return{
