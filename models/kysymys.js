@@ -1,7 +1,10 @@
 const mongoose = require('mongoose')
 
 const kysymysSchema = new mongoose.Schema({
-  tunniste: String,
+  tunniste: {
+    type: String,
+    unique: true
+  },
   kysymys: String,
   selitys: String,
   explain: String,

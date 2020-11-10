@@ -18,7 +18,8 @@ const voteRouter = require('./controllers/vote')
 const memberRouter = require('./controllers/member')
 const vaskiUploadRouter = require('./controllers/vaskiUpload')
 
-const schedule = require('./utils/scheduled')
+const scheduled = require('./utils/scheduled')
+var schedule = require('node-schedule');
 const vaskiData = require('./utils/vaskiData')
 const vaskiDataVotes = require('./services/vaskiDataVotes')
 
@@ -69,8 +70,10 @@ app.get('/*', function(req, res) {
   })
 })
 app.use(middleware.error)
+console.log('nyt', new Date);
 
-// schedule.twitterBot
+scheduled.twitterBot
+
 // vaskiData.getSpeaks()
 
 vaskiDataVotes.getNewVoting()

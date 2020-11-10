@@ -3,6 +3,8 @@ var parser = require('fast-xml-parser');
 const util = require('util')
 const VaskiUpload = require('../models/vaskiUpload')
 const Member = require('../models/member')
+const Kysymys = require('../models/kysymys')
+
 
 const getNewVoting = async function () {
     try {
@@ -14,7 +16,7 @@ const getNewVoting = async function () {
     
     // console.log(util.inspect(vaski.data.rowData, {showHidden: false, depth: null}))
 
-    console.log(vaski)
+    // console.log(vaski)
 
     let voteType;
 
@@ -30,7 +32,6 @@ const getNewVoting = async function () {
       } else {
         break;
       }
-      console.log('T*M*', vaski.data)
     }
 
     await VaskiUpload.findByIdAndUpdate(vaskiUploadId, {
@@ -39,14 +40,32 @@ const getNewVoting = async function () {
   
     const kysymys = vaski.data['rowData'][0][21]
     const url = "https://www.eduskunta.fi/FI/vaski" + vaski.data['rowData'][0][32]
+    const tunniste = vaski.data['rowData'][0][31]
+    const vuosi = vaski.data['rowData'][0][2]
 
-    console.log('ksymys', kysymys);
-    console.log('url', url);
+
     
 
     const votes = await getVotes(vaskiVoteId)
     
     const partyVotes = await getPartiesVotes(vaskiVoteId)
+
+
+    const kysymys_model = {
+      tunniste: tunniste,
+      kysymys: kysymys,
+      selitys: kysymys,
+      url: url,
+      puolueet: partyVotes,
+      edustajat: votes,
+      vuosi: vuosi,
+      createdAt: Date.now()
+    }
+
+    let new_kysymys = new Kysymys(kysymys_model)
+    new_kysymys = await new_kysymys.save()
+    
+    console.log('succes', new_kysymys);
         
   } catch(exception){
     console.log('VaskiData ' + exception.message);
@@ -59,10 +78,7 @@ const getVotes = async function (voteId) {
 
   let votes =  firstVotes.data['rowData'].concat(secondVotes.data['rowData'])
   let votesOut = votes.map(vote => {
-    const member = getMember(vote)
-
     const out =  {
-      member: member,
       kanta: translateOpinion(vote[6].trim()),
       nimi: vote[3] + vote[2] + "/" + translateParties(vote[5].trim())
     }
@@ -106,7 +122,19 @@ getPartiesVotes = async (voteId) => {
     puolue.yhteensa = Number(data[7])
     return puolue
   })
-  return out
+  const parties = [
+    "Sosialidemokraattinen eduskuntaryhmä",
+    "Perussuomalaisten eduskuntaryhmä",
+    "Kansallisen kokoomuksen eduskuntaryhmä",
+    'Vihreä eduskuntaryhmä',
+    'Keskustan eduskuntaryhmä',
+    'Vasemmistoliiton eduskuntaryhmä',
+    'Ruotsalainen eduskuntaryhmä',
+    "Kristillisdemokraattinen eduskuntaryhmä",
+    'Liike Nyt -eduskuntaryhmä'
+  ]
+  const result = out.filter(party => parties.includes(party.nimi))
+  return result
 }
 
 translateOpinion = (op) => {
@@ -147,7 +175,7 @@ translateParties = (party) => {
 translateGroups = (party) => {
   switch (party) {
     case 'Liike Nyt-rörelsens riksdagsgrupp':
-      return 'Liike Nyt -eduskuntaryhmä"';
+      return 'Liike Nyt -eduskuntaryhmä';
     case 'Kristdemokratiska riksdagsgruppen':
       return "Kristillisdemokraattinen eduskuntaryhmä";
     case 'Svenska riksdagsgruppen':
@@ -157,7 +185,7 @@ translateGroups = (party) => {
     case 'Centerns riksdagsgrupp':
       return 'Keskustan eduskuntaryhmä'
     case 'Gröna riksdagsgruppen':
-      return 'Vihreä eduskuntaryhmä"'
+      return 'Vihreä eduskuntaryhmä'
     case 'Samlingspartiets riksdagsgrupp':
       return "Kansallisen kokoomuksen eduskuntaryhmä";
     case 'Sannfinländarnas riksdagsgrupp':
