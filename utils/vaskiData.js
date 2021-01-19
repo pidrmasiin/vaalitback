@@ -5,7 +5,9 @@ const VaskiUpload = require('../models/vaskiUpload')
 
 const getSpeaks = async function () {
     try {
-    const vaskiUploadId = '5f37b8d5dab2f622c1ce4b44'
+    // Dev
+    // const vaskiUploadId = '5f37b8d5dab2f622c1ce4b44'
+    const vaskiUploadId = '600723be24cf6333749f7530'
     const vaskiUpload = await VaskiUpload
       .findById(vaskiUploadId)
       
