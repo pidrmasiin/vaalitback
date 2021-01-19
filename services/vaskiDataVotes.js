@@ -8,7 +8,9 @@ const Kysymys = require('../models/kysymys')
 
 const getNewVoting = async function () {
     try {
-      const vaskiUploadId = '5f3834d3354d1a567d62dba9'
+      // Dev
+    // const vaskiUploadId = '5f37b8d5dab2f622c1ce4b44'
+    const vaskiUploadId = '600723be24cf6333749f7530'
       const vaskiUpload = await VaskiUpload
         .findById(vaskiUploadId)
     let startValue = parseInt(vaskiUpload.lastVaskiId)

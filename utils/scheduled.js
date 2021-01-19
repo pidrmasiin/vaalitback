@@ -29,7 +29,7 @@ var twitterBot = schedule.scheduleJob('10 4,12,16 * * *', function(){
 //     tweetMakelaSpeaks(makela)
 // });
 
-schedule.scheduleJob('45 * * * *', function(){
+schedule.scheduleJob('49 * * * *', function(){
     vaskiDataVotes.getNewVoting()
 });
 
