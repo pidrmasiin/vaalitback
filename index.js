@@ -76,7 +76,7 @@ scheduled.twitterBot
 
 // vaskiData.getSpeaks()
 
-vaskiDataVotes.getNewVoting()
+// vaskiDataVotes.getNewVoting()
 
 const server = http.createServer(app)
 

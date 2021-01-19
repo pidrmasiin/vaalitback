@@ -42,9 +42,13 @@ const getNewVoting = async function () {
     })
   
     const kysymys = vaski.data['rowData'][0][21]
+    const selite = vaski.data['rowData'][0][15]
     const url = "https://www.eduskunta.fi/FI/vaski" + vaski.data['rowData'][0][32]
     const tunniste = vaski.data['rowData'][0][31]
     const vuosi = vaski.data['rowData'][0][2]
+
+    console.log(vaski.data['rowData'][0]);
+    
 
 
     
@@ -61,12 +65,13 @@ const getNewVoting = async function () {
     const kysymys_model = {
       tunniste: tunniste,
       kysymys: kysymys,
-      selitys: kysymys,
+      selitys: selite,
       url: url,
       puolueet: partyVotes,
       edustajat: votes,
       vuosi: vuosi,
-      createdAt: Date.now()
+      createdAt: Date.now(),
+      disabled: true
     }
 
     let new_kysymys = new Kysymys(kysymys_model)

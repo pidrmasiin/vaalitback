@@ -22,7 +22,8 @@ const kysymysSchema = new mongoose.Schema({
   jaaLeftist: Boolean,
   green: Boolean,
   createdAt: Date,
-  yle2019: String
+  yle2019: String,
+  disabled: Boolean
 })
 
 kysymysSchema.plugin(uniqueValidator);
@@ -46,7 +47,8 @@ kysymysSchema.statics.format = (kysymys) => {
     green: kysymys.green,
     createdAt: kysymys.createdAt,
     yle2019: kysymys.yle2019,
-    explain: kysymys.explain
+    explain: kysymys.explain,
+    disabled: kysymys.disabled
   }
 }
 
