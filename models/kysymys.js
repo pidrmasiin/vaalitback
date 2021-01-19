@@ -1,7 +1,12 @@
 const mongoose = require('mongoose')
+var uniqueValidator = require('mongoose-unique-validator');
 
 const kysymysSchema = new mongoose.Schema({
-  tunniste: String,
+  tunniste: {
+    type: String,
+    index: true,
+    unique: true
+  },
   kysymys: String,
   selitys: String,
   explain: String,
@@ -17,8 +22,11 @@ const kysymysSchema = new mongoose.Schema({
   jaaLeftist: Boolean,
   green: Boolean,
   createdAt: Date,
-  yle2019: String
+  yle2019: String,
+  disabled: Boolean
 })
+
+kysymysSchema.plugin(uniqueValidator);
 
 kysymysSchema.statics.format = (kysymys) => {
   return{
@@ -39,7 +47,8 @@ kysymysSchema.statics.format = (kysymys) => {
     green: kysymys.green,
     createdAt: kysymys.createdAt,
     yle2019: kysymys.yle2019,
-    explain: kysymys.explain
+    explain: kysymys.explain,
+    disabled: kysymys.disabled
   }
 }
 

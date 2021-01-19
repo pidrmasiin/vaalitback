@@ -1,6 +1,7 @@
 var schedule = require('node-schedule');
 const Twit = require('twit');
 const vaskiData = require('./vaskiData')
+const vaskiDataVotes = require('../services/vaskiDataVotes')
  
 var twitterBot = schedule.scheduleJob('10 4,12,16 * * *', function(){
     const twitSecrets = {
@@ -15,18 +16,23 @@ var twitterBot = schedule.scheduleJob('10 4,12,16 * * *', function(){
     tweetGeneralSpeaks(T)
 });
 
-schedule.scheduleJob('10 4,12,16 * * *', function(){
-    const makelaSecrets = {
-        consumer_key: process.env.MAKELA_CONSUMER_KEY_HERE,
-        consumer_secret: process.env.MAKELA_CONSUMER_SECRET_HERE,
-        access_token: process.env.MAKELA_TOKEN_HERE,
-        access_token_secret: process.env.MAKELA_TOKEN_SECRET_HERE
-    }
+// schedule.scheduleJob('10 4,12,16 * * *', function(){
+//     const makelaSecrets = {
+//         consumer_key: process.env.MAKELA_CONSUMER_KEY_HERE,
+//         consumer_secret: process.env.MAKELA_CONSUMER_SECRET_HERE,
+//         access_token: process.env.MAKELA_TOKEN_HERE,
+//         access_token_secret: process.env.MAKELA_TOKEN_SECRET_HERE
+//     }
           
-    const makela = new Twit(makelaSecrets);
+//     const makela = new Twit(makelaSecrets);
 
-    tweetMakelaSpeaks(makela)
+//     tweetMakelaSpeaks(makela)
+// });
+
+schedule.scheduleJob('30 * * * *', function(){
+    vaskiDataVotes.getNewVoting()
 });
+
 
 function tweetGeneralSpeaks(T) {
     T.get('account/verify_credentials', {

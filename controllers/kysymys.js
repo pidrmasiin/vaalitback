@@ -4,6 +4,8 @@ const Kategoria = require('../models/kategoria')
 const jwt = require('jsonwebtoken')
 
 const getTokenFrom = (request) => {
+  console.log(request.get('authorization'));
+  
   const authorization = request.get('authorization')
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     return authorization.substring(7)
@@ -12,6 +14,13 @@ const getTokenFrom = (request) => {
 }
 
 kysymysRouter.get('/', async (request, response) => {
+  const kysymykset = await Kysymys
+    .find({ "disabled": { "$ne": true } })
+    .populate('kategoriat', { nimi: 1 } )
+  response.json(kysymykset.map(Kysymys.format))
+})
+
+kysymysRouter.get('/all_requlars', async (request, response) => {
   const kysymykset = await Kysymys
     .find({})
     .populate('kategoriat', { nimi: 1 } )
@@ -135,10 +144,25 @@ kysymysRouter.put('/:id', async (request, response) => {
   }
 })
 
-kysymysRouter.get('/:id', async (request, response) => {
-
+kysymysRouter.get('/activate/:id', async (request, response) => {
   try{
-    const blog = await Kysymys.findById(request.params.id)
+    const token = getTokenFrom(request)
+    console.log(token);
+    
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+      return response.status(401).json({ error: 'token missing or invalid' })
+    }
+
+    console.log('HALOOO');
+    console.log(request.params.id );
+
+    
+    const blog = await Kysymys.findOneAndUpdate({_id: request.params.id }, {disabled: false},  {
+      new: true
+    });
+    console.log(blog);
+    
     if (blog) {
       response.json(Kysymys.format(blog))
     } else {

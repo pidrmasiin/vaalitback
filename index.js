@@ -7,8 +7,6 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const config = require('./utils/config')
 const middleware = require('./utils/middleware')
-const schedule = require('./utils/scheduled')
-const vaskiData = require('./utils/vaskiData')
 const kysymyksetRouter = require('./controllers/kysymys')
 const loginRouter = require('./controllers/login')
 const userRouter = require('./controllers/user')
@@ -16,8 +14,26 @@ const kategoriatRouter = require('./controllers/kategoria')
 const yleRouter = require('./controllers/yle')
 const yle2019Router = require('./controllers/yle2019')
 const speakRouter = require('./controllers/speak')
+const voteRouter = require('./controllers/vote')
+const memberRouter = require('./controllers/member')
+const vaskiUploadRouter = require('./controllers/vaskiUpload')
 
-mongoose.connect(config.mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true } )
+const scheduled = require('./utils/scheduled')
+var schedule = require('node-schedule');
+const vaskiData = require('./utils/vaskiData')
+const vaskiDataVotes = require('./services/vaskiDataVotes')
+
+
+mongoose
+     .connect( config.mongoUrl, { 
+       useNewUrlParser: true,
+       useCreateIndex: true,
+       useUnifiedTopology: true,
+       useFindAndModify: false 
+      })
+     .then(() => console.log( 'Database Connected' ))
+     .catch(err => console.log( err ));
+
 mongoose.Promise = global.Promise
 
 app.use(cors())
@@ -42,6 +58,9 @@ app.use('/api/kategoriat', kategoriatRouter)
 app.use('/api/yle', yleRouter)
 app.use('/api/yle2019', yle2019Router)
 app.use('/api/speaks', speakRouter)
+app.use('/api/votes', voteRouter)
+app.use('/api/members', memberRouter)
+app.use('/api/vaskiUploads', vaskiUploadRouter)
 
 app.get('/*', function(req, res) {
   res.sendFile(path.join(__dirname, 'build/index.html'), function(err) {
@@ -51,9 +70,13 @@ app.get('/*', function(req, res) {
   })
 })
 app.use(middleware.error)
+console.log('nyt', new Date);
 
-// schedule.twitterBot
+scheduled.twitterBot
+
 // vaskiData.getSpeaks()
+
+// vaskiDataVotes.getNewVoting()
 
 const server = http.createServer(app)
 
