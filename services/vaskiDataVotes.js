@@ -38,10 +38,6 @@ const getNewVoting = async function () {
         break;
       }
     }
-
-    await VaskiUpload.findByIdAndUpdate(vaskiUploadId, {
-      "lastVaskiId": vaskiVoteId
-    })
   
     const kysymys = vaski.data['rowData'][0][21]
     const selite = vaski.data['rowData'][0][15]
@@ -51,10 +47,6 @@ const getNewVoting = async function () {
 
     console.log(vaski.data['rowData'][0]);
     
-
-
-    
-
     const votes = await getVotes(vaskiVoteId)
     
     const partyVotes = await getPartiesVotes(vaskiVoteId)
@@ -78,8 +70,14 @@ const getNewVoting = async function () {
 
     let new_kysymys = new Kysymys(kysymys_model)
     new_kysymys = await new_kysymys.save()
+
+
+    await VaskiUpload.findByIdAndUpdate(vaskiUploadId, {
+      "lastVaskiId": vaskiVoteId
+    })
     
     console.log('succes', new_kysymys);
+    
         
   } catch(exception){
     console.log('VaskiData ' + exception.message);
