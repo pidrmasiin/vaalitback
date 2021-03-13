@@ -209,6 +209,58 @@ translateGroups = (party) => {
   }
 }
 
+const addSingle = async function (vaskiId) {
+  console.log('vaskiID', vaskiId);
+  
+  try {
+    const vaskiVoteId = vaskiId
+    const vaski = await axios.get(`https://avoindata.eduskunta.fi/api/v1/tables/SaliDBAanestys/rows?perPage=10&page=0&columnName=AanestysId&columnValue=${vaskiVoteId}`)
+    console.log(vaski.data.rowData);
+    const kysymys = vaski.data['rowData'][0][21]
+    const selite = vaski.data['rowData'][0][15]
+    const url = "https://www.eduskunta.fi/FI/vaski" + vaski.data['rowData'][0][32]
+    const tunniste = vaski.data['rowData'][0][31]
+    const vuosi = vaski.data['rowData'][0][2]
+
+    console.log(vaski.data['rowData'][0]);
+    
+    const votes = await getVotes(vaskiVoteId)
+    
+    const partyVotes = await getPartiesVotes(vaskiVoteId)
+    
+    if (partyVotes.length == 0){
+      return
+    }
+    
+
+    const kysymys_model = {
+      tunniste: tunniste,
+      kysymys: kysymys,
+      selitys: selite,
+      url: url,
+      puolueet: partyVotes,
+      edustajat: votes,
+      vuosi: vuosi,
+      createdAt: Date.now(),
+      disabled: true
+    }
+
+    console.log('kysymys', kysymys_model);
+    
+    let new_kysymys = new Kysymys(kysymys_model)
+    new_kysymys = await new_kysymys.save()
+
+
+    console.log('succes', new_kysymys);
+    return new_kysymys
+        
+  } catch(exception){
+    console.log('VaskiData ' + exception.message);
+    return exception.message
+  }
+}
+
 module.exports = {
-    getNewVoting
+    getNewVoting,
+    addSingle
   }

@@ -2,6 +2,8 @@ const kysymysRouter = require('express').Router()
 const Kysymys = require('../models/kysymys')
 const Kategoria = require('../models/kategoria')
 const jwt = require('jsonwebtoken')
+const vaskiDataVotes = require('../services/vaskiDataVotes')
+
 
 const getTokenFrom = (request) => {
   console.log(request.get('authorization'));
@@ -174,6 +176,31 @@ kysymysRouter.get('/activate/:id', async (request, response) => {
   }
 
 })
+
+kysymysRouter.get('/newByVaski/:id', async (request, response) => {
+  try{
+    // const token = getTokenFrom(request)
+    // console.log(token);
+    
+    // const decodedToken = jwt.verify(token, process.env.SECRET)
+    // if (!token || !decodedToken.id) {
+    //   return response.status(401).json({ error: 'token missing or invalid' })
+    // }
+
+    console.log('HALOOO');
+    let resp = await vaskiDataVotes.addSingle(request.params.id);
+    console.log('resp', resp);
+    
+    response.json(resp)
+    
+   
+  } catch(exception) {
+    console.log(exception)
+    response.status(400).send({ error: 'malformatted id' })
+  }
+
+})
+
 
 kysymysRouter.delete('/:id', async (request, response) => {
   try{
