@@ -29,6 +29,20 @@ kysymysRouter.get('/all_requlars', async (request, response) => {
   response.json(kysymykset.map(Kysymys.format))
 })
 
+kysymysRouter.get('/marins', async (request, response) => {
+  const kysymykset = await Kysymys
+    .find({ "disabled": { "$ne": true }, "createdAt": {"$gte": new Date(2019, 12, 10)} })
+    .populate('kategoriat', { nimi: 1 } )
+  response.json(kysymykset.map(Kysymys.format))
+})
+
+kysymysRouter.get('/all_marins', async (request, response) => {
+  const kysymykset = await Kysymys
+    .find({"createdAt": {"$gte": new Date(2019, 12, 10)} })
+    .populate('kategoriat', { nimi: 1 } )
+  response.json(kysymykset.map(Kysymys.format))
+})
+
 kysymysRouter.get('/:id', async (request, response) => {
   try{
     const kysymys = await Kysymys
