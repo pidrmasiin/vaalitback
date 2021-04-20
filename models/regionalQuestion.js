@@ -3,6 +3,7 @@ var uniqueValidator = require('mongoose-unique-validator');
 
 const regionalQuestionSchema = new mongoose.Schema({
   question: String,
+  explain: String,
   url: String,
   parties: Object,
   yes: Object,
@@ -22,6 +23,7 @@ regionalQuestionSchema.statics.format = (regionalQuestion) => {
   return{
     id: regionalQuestion._id,
     question: regionalQuestion.question,
+    explain: regionalQuestion.explain,
     url: regionalQuestion.url,
     parties: regionalQuestion.parties,
     yes: regionalQuestion.yes,
