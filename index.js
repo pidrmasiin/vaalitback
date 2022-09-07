@@ -30,7 +30,8 @@ mongoose
        useNewUrlParser: true,
        useCreateIndex: true,
        useUnifiedTopology: true,
-       useFindAndModify: false 
+       useFindAndModify: false,
+       dbName: "vaalikone"
       })
      .then(() => console.log( 'Database Connected' ))
      .catch(err => console.log( err ));

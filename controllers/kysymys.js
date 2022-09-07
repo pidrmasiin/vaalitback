@@ -16,9 +16,14 @@ const getTokenFrom = (request) => {
 }
 
 kysymysRouter.get('/', async (request, response) => {
+  console.log("name", Kysymys.db.name);
+  console.log("host", Kysymys.db.host);
+  console.log("haloo", Kysymys.db.port);
+
   const kysymykset = await Kysymys
     .find({ "disabled": { "$ne": true } })
     .populate('kategoriat', { nimi: 1 } )
+    console.log("kysymykset", kysymykset)
   response.json(kysymykset.map(Kysymys.format))
 })
 
