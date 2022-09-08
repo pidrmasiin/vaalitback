@@ -3,7 +3,7 @@ const Twit = require('twit');
 const vaskiData = require('./vaskiData')
 const vaskiDataVotes = require('../services/vaskiDataVotes')
  
-var twitterBot = schedule.scheduleJob('10 4,12,16 * * *', function(){
+var twitterBot = schedule.scheduleJob('10 4 1,5,10,15,20,25,28 * * *', function(){
     const twitSecrets = {
         consumer_key: process.env.APPLICATION_CONSUMER_KEY_HERE,
         consumer_secret: process.env.APPLICATION_CONSUMER_SECRET_HERE,
