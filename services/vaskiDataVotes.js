@@ -9,8 +9,9 @@ const Kysymys = require('../models/kysymys')
 const getNewVoting = async function () {
     try {
       // Dev
-    // const vaskiUploadId = '5f37b8d5dab2f622c1ce4b44'
+    // const vaskiUploadId = '5f3834d3354d1a567d62dba9'
     const vaskiUploadId = '600723be24cf6333749f7530'
+    
       const vaskiUpload = await VaskiUpload
         .findById(vaskiUploadId)
     let startValue = parseInt(vaskiUpload.lastVaskiId)
@@ -25,10 +26,9 @@ const getNewVoting = async function () {
       
     let vaskiVoteId = startValue
     
-    while (voteType != 'hyväksyminen/hylkääminen' && language != '1') {
+    while (voteType != ('hyväksyminen/ hylkääminen' || voteType != 'hyväksyminen/ hylkääminen') && language != '1') {
       const newVaski = await axios.get(`https://avoindata.eduskunta.fi/api/v1/tables/SaliDBAanestys/rows?perPage=10&page=0&columnName=AanestysId&columnValue=${vaskiVoteId + 1}`)
-      console.log(newVaski);
-      
+      // console.log(newVaski.data);
       if (newVaski.data.rowData.length) {
         vaski = newVaski
         vaskiVoteId = parseInt(vaskiVoteId) + 1
@@ -38,6 +38,10 @@ const getNewVoting = async function () {
         break;
       }
     }
+
+    await VaskiUpload.findByIdAndUpdate(vaskiUploadId, {
+      "lastVaskiId": vaskiVoteId + 1
+    })
   
     const kysymys = vaski.data['rowData'][0][21]
     const selite = vaski.data['rowData'][0][15]

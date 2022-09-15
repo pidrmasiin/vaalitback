@@ -29,9 +29,9 @@ var twitterBot = schedule.scheduleJob('10 4 1,5,10,15,20,25,28 * * *', function(
 //     tweetMakelaSpeaks(makela)
 // });
 
-// schedule.scheduleJob('49 * * * *', function(){
-//     vaskiDataVotes.getNewVoting()
-// });
+schedule.scheduleJob('49 * * * *', function(){
+    vaskiDataVotes.getNewVoting()
+});
 
 
 function tweetGeneralSpeaks(T) {
