@@ -28,9 +28,7 @@ const vaskiDataVotes = require('./services/vaskiDataVotes')
 mongoose
      .connect( config.mongoUrl, { 
        useNewUrlParser: true,
-       useCreateIndex: true,
        useUnifiedTopology: true,
-       useFindAndModify: false,
       //  dbName: "vaalikone"
       })
      .then(() => console.log( 'Database Connected' ))
