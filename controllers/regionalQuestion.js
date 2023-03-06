@@ -18,6 +18,15 @@ regionalQuestionRouter.get('/', async (request, response) => {
   response.json(questions.map(RegionalQuestion.format))
 })
 
+regionalQuestionRouter.get('/region/:region', async (request, response) => {
+  const city = request.params.region.toLocaleLowerCase()
+  console.log('HALOO', city);
+
+  const questions = await RegionalQuestion
+    .find({ "disabled": { "$ne": true }, "city": city})
+  response.json(questions.map(RegionalQuestion.format))
+})
+
 regionalQuestionRouter.get('/all_requlars', async (request, response) => {
   const questions = await RegionalQuestion
     .find({})

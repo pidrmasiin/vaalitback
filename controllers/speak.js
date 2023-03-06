@@ -15,10 +15,22 @@ speakRouter.get('/', async (request, response) => {
   response.json(speaks.map(Speak.format))
 })
 
-speakRouter.get('/:id', async (request, response) => {
+speakRouter.get('/one/:id', async (request, response) => {
   try{
     const speak = await Speak
       .findById(request.params.id)
+    response.json(Speak.format(speak))
+  }catch (exception) {
+    console.log(exception)
+    response.status(400).json({ error: 'Cant find speak' })
+  }
+})
+
+speakRouter.get('/question/:questionId', async (request, response) => {
+  try{
+    const speak = await Speak
+      .findOne({ question: request.params.questionId})
+      console.log(speak)
     response.json(Speak.format(speak))
   }catch (exception) {
     console.log(exception)

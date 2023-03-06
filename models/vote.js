@@ -1,25 +1,27 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
-const voteSchema = new mongoose.Schema({
-    kysymys: { type: mongoose.Schema.Types.ObjectId, ref: 'Kysymys' },
+const voteSchema = new mongoose.Schema(
+  {
+    kysymys: { type: mongoose.Schema.Types.ObjectId, ref: "Kysymys" },
     vaskiVoteId: {
-        type: String,
-        unique: true
+      type: String,
+      unique: true,
     },
     opinion: String,
-    member: { type: mongoose.Schema.Types.ObjectId, ref: 'Member' }
-}, { timestamps: true })
+    member: { type: mongoose.Schema.Types.ObjectId, ref: "Member" },
+  },
+  { timestamps: true }
+);
 
 voteSchema.statics.format = (vote) => {
-  return{
+  return {
     id: vote._id,
     nimi: vote.vaskiVoteId,
     kysymykset: vote.opinion,
-    vastaukset: vote.member
-  }
-}
+    vastaukset: vote.member,
+  };
+};
 
-const Vote = mongoose.model('Vote', voteSchema)
+const Vote = mongoose.model("Vote", voteSchema);
 
-
-module.exports = Vote
+module.exports = Vote;
