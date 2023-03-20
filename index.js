@@ -23,6 +23,7 @@ const scheduled = require("./utils/scheduled");
 var schedule = require("node-schedule");
 const vaskiData = require("./utils/vaskiData");
 const vaskiDataVotes = require("./services/vaskiDataVotes");
+const timeout = require("connect-timeout");
 
 mongoose
   .connect(config.mongoUrl, {
@@ -73,6 +74,8 @@ app.get("/*", function (req, res) {
   });
 });
 app.use(middleware.error);
+app.use(timeout("20"));
+
 console.log("nyt", new Date());
 
 // scheduled.twitterBot;
