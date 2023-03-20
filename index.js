@@ -75,7 +75,7 @@ app.get("/*", function (req, res) {
 app.use(middleware.error);
 console.log("nyt", new Date());
 
-scheduled.twitterBot;
+// scheduled.twitterBot;
 
 // vaskiData.getSpeaks()
 
