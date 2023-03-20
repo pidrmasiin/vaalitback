@@ -22,7 +22,7 @@ kysymysRouter.get("/", async (request, response) => {
   const kysymykset = await Kysymys.find({
     disabled: { $ne: true },
   }).populate("kategoriat", { nimi: 1 });
-  console.log("kysymykset", kysymykset);
+
   response.json(kysymykset.map(Kysymys.format));
 });
 
